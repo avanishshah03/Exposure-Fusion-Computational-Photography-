@@ -2,8 +2,11 @@ import cv2
 import numpy as np
 
 def load_image(file_path):
-    # Load an image from file path
-    return cv2.imread(file_path)
+    # Load an image from file path and convert it to RGB
+    image = cv2.imread(file_path)
+    if image is not None:
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+    return image
 
 def resize_image(image, width, height):
     # Resize image to the given dimensions
@@ -19,7 +22,7 @@ def exposure_fusion(image1_path, image2_path):
         print("Error loading images")
         return None
 
-    # Ensure both images are the same size by resizing both to the dimensions of the first image
+    # Ensure both images are the same size
     height, width, _ = img1.shape
     img1 = resize_image(img1, width, height)
     img2 = resize_image(img2, width, height)
@@ -34,13 +37,17 @@ def exposure_fusion(image1_path, image2_path):
     # Merge images
     fused_image = merge_mertens.process([img1, img2])
 
-    # Convert the result to 8-bit image
-    fused_image = np.clip(fused_image * 255, 0, 255).astype('uint8')
+    # Diagnostic: check the range of fused image values
+    print(f"Fused image range: min={fused_image.min()}, max={fused_image.max()}")
+
+    # Normalize the fused image
+    fused_image -= fused_image.min()  # shift to 0
+    fused_image /= fused_image.max()  # scale to 1
+    fused_image = (fused_image * 255).astype('uint8')  # scale to [0, 255]
 
     return fused_image
 
 # Example usage:
-# Replace 'low_exposure.jpg' and 'high_exposure.jpg' with the paths to your images
 fused_img = exposure_fusion('low_exposure.jpg', 'high_exposure.jpg')
 if fused_img is not None:
     # Save the fused image
@@ -48,3 +55,5 @@ if fused_img is not None:
     print("Fusion complete, image saved as 'fused_output.jpg'")
 else:
     print("Fusion failed.")
+
+

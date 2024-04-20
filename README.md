@@ -20,8 +20,7 @@ Before running the project, ensure that Python and OpenCV are installed on your 
 ```bash
 pip install opencv-python-headless
 ```
-
-##Team Members
+## Team Members
 - Avanish Shah
 - Dev Patel
 - Rijul Ranjan

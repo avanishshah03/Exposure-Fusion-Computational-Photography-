@@ -19,6 +19,7 @@ The project is structured into several modules to handle different aspects of th
 Before running the project, ensure that Python and OpenCV are installed on your system. You can install OpenCV using pip:
 ```bash
 pip install opencv-python-headless
+```
 
 ##Team Members
 - Avanish Shah

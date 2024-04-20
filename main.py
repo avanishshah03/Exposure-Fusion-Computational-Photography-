@@ -1,10 +1,17 @@
+import os
 import cv2
 import numpy as np
 from image_loader import load_image
 from image_processor import ImageProcessor
 
-def perform_exposure_fusion(image1_path, image2_path):
+def perform_exposure_fusion(input_folder, output_folder, image1_name, image2_name):
     processor = ImageProcessor()
+    
+    # Construct paths to the input images
+    image1_path = os.path.join(input_folder, image1_name)
+    image2_path = os.path.join(input_folder, image2_name)
+
+    # Load images
     img1 = load_image(image1_path)
     img2 = load_image(image2_path)
 
@@ -23,12 +30,28 @@ def perform_exposure_fusion(image1_path, image2_path):
     fused_image = np.clip(fused_image, 0, 255).astype('uint8')
     fused_image = processor.enhance_local_contrast(fused_image)
 
-    return fused_image
+    # Check if output folder exists, if not, create it
+    if not os.path.exists(output_folder):
+        os.makedirs(output_folder)
 
-# Example usage:
-fused_img = perform_exposure_fusion('low_exposure.jpg', 'high_exposure.jpg')
-if fused_img is not None:
-    cv2.imwrite('fused_output.jpg', fused_img)
-    print("Fusion complete, image saved as 'fused_output.jpg'")
+    # Construct output image path
+    output_image_path = os.path.join(output_folder, f"fused_{image1_name}")
+
+    # Save the fused image
+    cv2.imwrite(output_image_path, fused_image)
+    print(f"Fusion complete, image saved as '{output_image_path}'")
+    return output_image_path
+
+# Directory and file configuration
+input_folder = 'input_images'
+output_folder = 'result_images'
+image1_name = 'low_exposure.jpg'
+image2_name = 'high_exposure.jpg'
+
+# Perform fusion
+result_path = perform_exposure_fusion(input_folder, output_folder, image1_name, image2_name)
+if result_path:
+    print("Image processing successful.")
 else:
-    print("Fusion failed or no images to process.")
+    print("Image processing failed.")
+

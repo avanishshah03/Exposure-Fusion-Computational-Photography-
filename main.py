@@ -45,8 +45,8 @@ def perform_exposure_fusion(input_folder, output_folder, image1_name, image2_nam
 # Directory and file configuration
 input_folder = 'input_images'
 output_folder = 'result_images'
-image1_name = 'low_exposure.jpg'
-image2_name = 'high_exposure.jpg'
+image1_name = 'low_exposure_1.jpg'
+image2_name = 'high_exposure_1.jpg'
 
 # Perform fusion
 result_path = perform_exposure_fusion(input_folder, output_folder, image1_name, image2_name)

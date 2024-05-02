@@ -5,8 +5,7 @@ from image_processor import ImageProcessor
 
 def perform_exposure_fusion(input_folder, output_folder, image1_name, image2_name):
     processor = ImageProcessor()
-    
-    # Load images
+
     img1 = load_image(os.path.join(input_folder, image1_name))
     img2 = load_image(os.path.join(input_folder, image2_name))
 
@@ -18,11 +17,9 @@ def perform_exposure_fusion(input_folder, output_folder, image1_name, image2_nam
     aligned_images = processor.align_images([img1, img2], width, height)
     fused_image = processor.merge_images(aligned_images)
 
-    # Ensure output folder exists
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
 
-    # Save the fused image
     output_image_path = os.path.join(output_folder, f"fused_{image1_name}")
     cv2.imwrite(output_image_path, cv2.cvtColor(fused_image, cv2.COLOR_RGB2BGR))
     print(f"Fusion complete, image saved as '{output_image_path}'")
